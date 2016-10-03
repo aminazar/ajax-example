@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX Test</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">AJAX Test</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
+                    <li id="loginLink"><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
+                    <li id="regLink"><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></li>
+                    <li id="logoutLink" style="visibility: hidden;"><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Please sign in</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="loginUsername" class="sr-only">Username</label>
+                    <input type="text" id="loginUsername" class="form-control" placeholder="Username" required autofocus>
+                    <label for="loginPassword" class="sr-only">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                    <p class="bg-warning" id="loginErrMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Please register</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="regUsername" class="sr-only">Username</label>
+                    <input type="text" id="regUsername" class="form-control" placeholder="Username" required autofocus>
+                    <label for="regPassword" class="sr-only">Password</label>
+                    <input type="password" id="regPassword" class="form-control" placeholder="Password" required>
+                    <p class="bg-warning" id="regErrMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main component for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <h1>AJAX Test</h1>
+        <p>Click on below button to see AJAX in actoin:</p>
+        <button type="button" class="btn btn-default btn-lg" onclick="getClickData()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Click me!
+        </button>
+        <p class="bg-warning" id="clickError"></p>
+        <div id="results" style="visibility: hidden">
+            <table>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Total clicks</td>
+                    <td id="totalClicks"></td>
+                </tr>
+                <tr>
+                    <td>Click before you</td>
+                    <td id="clickBefore"></td>
+                </tr>
+                <tr>
+                    <td>Clicks by you</td>
+                    <td id="yourClicks"></td>
+                </tr>
+                <tr>
+                    <td>Your previous click was</td>
+                    <td id="prevClick"></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+</div> <!-- /container -->
+<script>
+    function ajaxRequestPromise(method, url, data)
+    {
+        return new Promise(function(resolve, reject) {
+            var httpRequest = new XMLHttpRequest();
+            httpRequest.open(method, url);
+            if (method === 'POST')
+                httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            reqBody = '';
+            for (var key in data)
+                if (data.hasOwnProperty(key))
+                    reqBody += key + '=' + encodeURIComponent(data[key]) + '&';
+            reqBody = reqBody.substr(0, reqBody.length - 2);
+            console.log(reqBody);
+            httpRequest.send(reqBody);
+            httpRequest.onreadystatechange = function() {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if(httpRequest.status === 200){
+                        ret = httpRequest.responseText;
+                        try{
+                            ret = JSON.parse(ret);
+                            resolve(ret);
+                        }catch(e){
+                            console.log('not json: ' + ret);
+                        }
+                        resolve(ret);
+                    }
+
+                    else
+                        reject(httpRequest.responseText ? httpRequest.responseText : {body: httpRequest.statusText?httpRequest.statusText:'could not get a response'});
+                }
+            }
+
+        });
+    }
+
+    function valueGetter(id){
+        return document.getElementById(id).value;
+    }
+
+    function setInnerHTML(id,value){
+        document.getElementById(id).innerHTML = value;
+    }
+
+    function login(){
+        loginWithParams(valueGetter('loginUsername'),valueGetter('loginPassword'));
+    }
+
+    function loginWithParams(u,p){
+        ajaxRequestPromise('POST','/login',{username:u, password: p })
+                .then((data)=>{
+                    document.getElementById('logoutLink').style.visibility='visible';
+                    document.getElementById('loginLink').style.visibility='hidden';
+                    document.getElementById('regLink').style.visibility='hidden';
+                    $('#loginModal').modal('toggle');
+                })
+                .catch((err)=>document.getElementById('loginErrMessage').innerHTML=err.body);
+    }
+
+    function register(){
+        var user = valueGetter('regUsername');
+        var pass = valueGetter('regPassword');
+        ajaxRequestPromise('POST','/register',{username: user, password: pass})
+                .then(data=>{
+                    $('#registerModal').modal('toggle');
+                    loginWithParams(user, pass);
+                })
+                .catch((err)=>document.getElementById('regErrMessage').innerHTML=err.body);
+    }
+
+    function getClickData(){
+        ajaxRequestPromise('GET','/click')
+                .then(data=>{
+                    console.log('data:',data);
+
+                    //data received from server is like: [{"count":"5"},{"username":"amin","click_time":"2016-10-03T07:11:30.000Z"},{"count":"5"},{"max":"2016-10-03T07:11:30.000Z"}]
+                    setInnerHTML('totalClicks',data[0].count);
+                    setInnerHTML('clickBefore', data[1].username+', at: ' + data[1].click_time);
+                    setInnerHTML('yourClicks', data[2].count);
+                    setInnerHTML('prevClick', data[3].max);
+                    document.getElementById('results').style.visibility='visible';
+                })
+                .catch(err=>{
+                    console.log('error:', err);
+                    document.getElementById('clickError').innerHTML=err;
+                });
+    }
+</script>
+</body>
+</html>

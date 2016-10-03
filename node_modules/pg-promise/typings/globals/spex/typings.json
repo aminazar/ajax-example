@@ -1,0 +1,13 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/vitaly-t/spex/dab68c4589973c1a9da828b90d40490054c64b80/typings.json",
+    "raw": "github:vitaly-t/spex#dab68c4589973c1a9da828b90d40490054c64b80",
+    "files": [
+      "typescript/spex.d.ts"
+    ],
+    "global": true,
+    "name": "spex",
+    "type": "typings"
+  }
+}
